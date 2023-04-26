@@ -1,3 +1,4 @@
+from enum import Enum
 from pydantic import BaseModel
 
 
@@ -18,6 +19,11 @@ Answer in Japanese:"""
 
 
 class Configuration(BaseModel):
+    class LlmModel(str, Enum):
+        gpt_3_turbo = "gpt-3.5-turbo"
+        google_flan_t5_xl = "google/flan-t5-xl"
+
+    llm_model: LlmModel = LlmModel.gpt_3_turbo
     chunk_size: int = 1000
     chunk_overlap: int = 100
     top_k_chunk: int = 2

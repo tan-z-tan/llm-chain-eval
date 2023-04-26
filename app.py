@@ -33,6 +33,11 @@ def run_app():
     val_upload = st.sidebar.file_uploader("Validation json file", type="json")
 
     st.sidebar.subheader("Parameters")
+    llm_model = st.sidebar.selectbox(
+        "LLM Model",
+        ["gpt-3.5-turbo", "google/flan-t5-xl"],
+        index=0
+    )
     chunk_size = st.sidebar.slider("Chunk Size", 100, 3000, 1000, 100)
     chunk_overlap = st.sidebar.slider("Chunk Overlap", 0, 1000, 0, 1)
     chain_type = st.sidebar.selectbox(
@@ -45,6 +50,7 @@ def run_app():
     match_template = st.sidebar.text_area("Match template", MATCH_TEMPLATE)
 
     config = Configuration(
+        llm_model=llm_model,
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
         chain_type=chain_type,
