@@ -14,13 +14,13 @@ git clone https://github.com/tan-z-tan/llm-chain-eval.git
 cd llm-chain-eval
 ```
 
-Use poetry to install libraries.
-```
-poetry install
-```
-or use pip
 ```
 pip install -r requirements.txt
+```
+
+Put your OPENAI_API_KEY `XXX`.
+```
+echo OPENAI_API_KEY=XXX > .env
 ```
 
 ## Run
@@ -31,6 +31,11 @@ or
 ```
 streamlit run app.py 
 ```
+
+- Upload source file (see sample_text.txt)
+- Upload validation file (see sample_validation.txt)
+
+<img src="app.jpg"/>
 
 ## Contributing
 We welcome contributions from the community to help make LLM Chain Eval a more powerful and versatile tool. If you have any ideas, suggestions, or improvements, please feel free to submit a pull request or open an issue. We appreciate your support in making this tool better for everyone!
