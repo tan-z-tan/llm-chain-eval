@@ -35,7 +35,12 @@ def run_app():
     st.sidebar.subheader("Parameters")
     llm_model = st.sidebar.selectbox(
         "LLM Model",
-        ["gpt-3.5-turbo", "google/flan-t5-xl"],
+        [
+            Configuration.LlmModel.gpt_3_turbo.value,
+            Configuration.LlmModel.google_flan_t5_large.value,
+            Configuration.LlmModel.google_flan_t5_xl.value,
+            Configuration.LlmModel.dolly_v2_3b.value,
+        ],
         index=0
     )
     chunk_size = st.sidebar.slider("Chunk Size", 100, 3000, 1000, 100)
@@ -45,12 +50,21 @@ def run_app():
         ["stuff", "map_reduce", "refine", "map_rerank"],
         index=0
     )
+    emb_type = st.sidebar.selectbox(
+        "Embedding Model",
+        [
+            Configuration.EmbeddingModel.gpt_embedding.value,
+            Configuration.EmbeddingModel.huggingface_embedding.value,
+        ],
+        index=0
+    )
     top_k_chunk = st.sidebar.slider("Top K Chunk", 1, 10, 2, 1)
     retrieve_chain_template = st.sidebar.text_area("Retrieve Chain template", RETRIEVE_CHAIN_TEMPLATE)
     match_template = st.sidebar.text_area("Match template", MATCH_TEMPLATE)
 
     config = Configuration(
         llm_model=llm_model,
+        embedding_model=emb_type,
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
         chain_type=chain_type,
@@ -94,7 +108,7 @@ def run_app():
                 ###### Correct: :{'green' if res["correct"] else 'red'}[{res["correct"]}]
                 """
                 st.markdown(result_md)
-            
+
             # save results and config
             with open(f"eval_{datetime.now().strftime('%Y%m%d%H%M%S')}.json", "w") as save_file:
                 res = {

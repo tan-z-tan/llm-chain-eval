@@ -2,6 +2,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate, ChatPromptTemplate, HumanMessagePromptTemplate
 from langchain.chains import RetrievalQA, LLMChain
 from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import FAISS
 
@@ -11,6 +12,8 @@ from config import Configuration
 def evaluate(documents, eval_datasets, config: Configuration):
     results = []
     llm = load_llm(config)
+    emb_model = load_emb_model(config)
+
     for dataset in eval_datasets:
         query = dataset.query
         answer = dataset.answer
@@ -23,7 +26,7 @@ def evaluate(documents, eval_datasets, config: Configuration):
         texts = text_splitter.split_documents(documents)
         retriever = FAISS.from_documents(
             texts,
-            OpenAIEmbeddings(),
+            emb_model,
             ).as_retriever(search_kwargs={"k": config.top_k_chunk})
 
         prompt = PromptTemplate(
@@ -34,7 +37,6 @@ def evaluate(documents, eval_datasets, config: Configuration):
 
         chain_type_kwargs = {"prompt": prompt}
         qa = RetrievalQA.from_chain_type(
-            # llm=ChatOpenAI(temperature=0),
             llm=llm,
             chain_type=config.chain_type,
             retriever=retriever,
@@ -72,8 +74,39 @@ def load_llm(config: Configuration):
         return ChatOpenAI(temperature=0)
     elif config.llm_model == Configuration.LlmModel.google_flan_t5_xl:
         from langchain import HuggingFaceHub
-        repo_id = "google/flan-t5-xl"  # See https://huggingface.co/models?pipeline_tag=text-generation&sort=downloads for some other options
+        repo_id = "google/flan-t5-xl"
+        return HuggingFaceHub(
+            repo_id=repo_id,
+            model_kwargs={"temperature": 0, "max_length": 2000}
+        )
+    elif config.llm_model == Configuration.LlmModel.google_flan_t5_large:
+        from langchain import HuggingFaceHub
+        repo_id = "google/flan-t5-large"
+        return HuggingFaceHub(
+            repo_id=repo_id,
+            model_kwargs={"temperature": 0, "max_length": 2000}
+        )
+    elif config.llm_model == Configuration.LlmModel.dolly_v2_3b:
+        import torch
+        from transformers import pipeline
+        model = pipeline(
+            model="databricks/dolly-v2-3b",
+            torch_dtype=torch.bfloat16,
+            trust_remote_code=True,
+            device_map="auto",)
+        # TODO: wrap in a class
 
-        return HuggingFaceHub(repo_id=repo_id, model_kwargs={"temperature":0, "max_length":64})
+        return model
     else:
         raise ValueError(f"Unknown LLM model {config.llm_model}")
+
+
+def load_emb_model(config: Configuration):
+    if config.embedding_model == Configuration.EmbeddingModel.gpt_embedding:
+        return OpenAIEmbeddings()
+    elif config.embedding_model == Configuration.EmbeddingModel.flan_embedding:
+        raise NotImplementedError()
+    elif config.embedding_model == Configuration.EmbeddingModel.huggingface_embedding:
+        return HuggingFaceEmbeddings()
+    else:
+        raise ValueError(f"Unknown embedding model {config.embedding_model}")

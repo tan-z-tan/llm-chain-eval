@@ -22,8 +22,16 @@ class Configuration(BaseModel):
     class LlmModel(str, Enum):
         gpt_3_turbo = "gpt-3.5-turbo"
         google_flan_t5_xl = "google/flan-t5-xl"
+        google_flan_t5_large = "google/flan-t5-large"
+        dolly_v2_3b = "dally-v2-3b"
+
+    class EmbeddingModel(str, Enum):
+        gpt_embedding = "gpt_embedding"
+        flan_embedding = "flan_embedding"
+        huggingface_embedding = "huggingface_embedding"
 
     llm_model: LlmModel = LlmModel.gpt_3_turbo
+    embedding_model: EmbeddingModel = EmbeddingModel.gpt_embedding
     chunk_size: int = 1000
     chunk_overlap: int = 100
     top_k_chunk: int = 2
