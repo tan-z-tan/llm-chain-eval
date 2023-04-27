@@ -29,13 +29,16 @@ def evaluate(documents, eval_datasets, config: Configuration):
             emb_model,
             ).as_retriever(search_kwargs={"k": config.top_k_chunk})
 
-        prompt = PromptTemplate(
-            # template=prompt_template, input_variables=["context", "question"]
-            template=config.retrieve_chain_template,
-            input_variables=["context", "question"],
-        )
+        if config.chain_type == "stuff":
+            prompt = PromptTemplate(
+                template=config.retrieve_chain_template,
+                input_variables=["context", "question"],
+            )
+            chain_type_kwargs = {"prompt": prompt}
+        else:
+            # TODO: implement other chain types
+            chain_type_kwargs = {}
 
-        chain_type_kwargs = {"prompt": prompt}
         qa = RetrievalQA.from_chain_type(
             llm=llm,
             chain_type=config.chain_type,
@@ -71,7 +74,7 @@ def match_response(response, answer, config: Configuration):
 
 def load_llm(config: Configuration):
     if config.llm_model == Configuration.LlmModel.gpt_3_turbo:
-        return ChatOpenAI(temperature=0)
+        return ChatOpenAI(temperature=0, verbose=config.verbose)
     elif config.llm_model == Configuration.LlmModel.google_flan_t5_xl:
         from langchain import HuggingFaceHub
         repo_id = "google/flan-t5-xl"
@@ -84,7 +87,8 @@ def load_llm(config: Configuration):
         repo_id = "google/flan-t5-large"
         return HuggingFaceHub(
             repo_id=repo_id,
-            model_kwargs={"temperature": 0, "max_length": 2000}
+            model_kwargs={"temperature": 0, "max_length": 2000},
+            verbose=config.verbose,
         )
     elif config.llm_model == Configuration.LlmModel.dolly_v2_3b:
         import torch
@@ -94,7 +98,7 @@ def load_llm(config: Configuration):
             torch_dtype=torch.bfloat16,
             trust_remote_code=True,
             device_map="auto",)
-        # TODO: wrap in a class
+        # TODO: This won't work. Wrap in a class
 
         return model
     else:
