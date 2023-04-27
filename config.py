@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 from pydantic import BaseModel
 
 
@@ -15,7 +16,7 @@ RETRIEVE_CHAIN_TEMPLATE = """Use the following pieces of context to answer the q
 {context}
 
 Question: {question}
-Answer in Japanese:"""
+Helpful Answer:"""
 
 
 class Configuration(BaseModel):
@@ -36,5 +37,6 @@ class Configuration(BaseModel):
     chunk_overlap: int = 100
     top_k_chunk: int = 2
     chain_type: str = "stuff"
-    retrieve_chain_template: str = RETRIEVE_CHAIN_TEMPLATE
+    retrieve_chain_template: Optional[str] = RETRIEVE_CHAIN_TEMPLATE
     match_template: str = MATCH_TEMPLATE
+    verbose: bool = True
