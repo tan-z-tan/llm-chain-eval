@@ -1,33 +1,33 @@
-## LLM Chain Eval
-LLM Chain Eval is a versatile and powerful tool designed to adjust parameters and evaluate Language Models (LMs) such as GPT-3.5-turbo, GPT-4 to obtain the desired output based on various input parameters. This repository allows you to experiment with different parameters, analyze input-output behavior, and assess the overall performance of the model.
+## LLM Chain Eval: Unleash the Power of Language Models
+LLM Chain Eval is a highly flexible and potent tool crafted to fine-tune parameters and evaluate state-of-the-art Language Models (LMs) such as GPT-3.5-turbo and GPT-4. This repository enables you to experiment with diverse parameters, examine input-output behavior, and evaluate the overall performance of your models to achieve the optimal output.
 
-## Features
-Currently supports only Question-Answering (QA) input-output scenarios.
-Aims to become a more general-purpose tool for evaluating LMs across different tasks and applications.
-Open to contributions from the community to expand its capabilities.
+## Core Features
+- Currently specializes in Question-Answering (QA) input-output scenarios.
+- Aspires to evolve into a comprehensive tool for appraising LMs across various tasks and applications.
+- Encourages community-driven contributions to augment its capabilities.
 
-### LLM Model
+### Supported LMs
 - OpenAI gpt-3.5-turbo
 - OpenAI gpt-4
 - google/flan-t5-large (HuggingFaceHub)
 - google/flan-t5-xl (HuggingFaceHub)
 - databricks/dolly-v2-3b (TBD)
 
-### Embedding
+### Embeddings
 - OpenAIEmbeddings
 - HuggingFaceEmbeddings
 - Flan-t5 (TBD)
 
-### Parameters
+### Tunable Parameters
 - Chunk Size
 - Chunk Overlap
 - Chain type
 
-### Prompt templates
-- You can modify prompt for stuff QA.
-- Match template to see if the answer is correct.
+### Customizable Prompt Templates
+- Modify prompts for QA scenarios.
+- Match templates to verify answer accuracy.
 
-## Setup
+## Quick and Easy Setup
 1. Clone the repository:
 
 ```
@@ -35,11 +35,12 @@ git clone https://github.com/tan-z-tan/llm-chain-eval.git
 cd llm-chain-eval
 ```
 
+2. Install required packages:
 ```
 pip install -r requirements.txt
 ```
 
-Put your OPENAI_API_KEY `XXX`.
+3. Set your OPENAI_API_KEY `XXX`:
 ```
 echo OPENAI_API_KEY=XXX > .env
 ```
@@ -49,7 +50,7 @@ Put your HUGGINGFACEHUB_API_TOKE `YYY` if you want to use HuggingFaceHub.
 echo HUGGINGFACEHUB_API_TOKEN=YYY >> .env
 ```
 
-## Run
+## Run the App
 ```shell
 streamlit run app.py 
 ```
