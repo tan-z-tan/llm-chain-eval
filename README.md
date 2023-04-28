@@ -23,6 +23,11 @@ Put your OPENAI_API_KEY `XXX`.
 echo OPENAI_API_KEY=XXX > .env
 ```
 
+Put your HUGGINGFACEHUB_API_TOKE `YYY` if you want to use HuggingFaceHub.
+```
+echo HUGGINGFACEHUB_API_TOKEN=YYY >> .env
+```
+
 ## Run
 ```
 poetry run streamlit run app.py 
