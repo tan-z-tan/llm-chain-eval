@@ -6,6 +6,27 @@ Currently supports only Question-Answering (QA) input-output scenarios.
 Aims to become a more general-purpose tool for evaluating LMs across different tasks and applications.
 Open to contributions from the community to expand its capabilities.
 
+### LLM Model
+- OpenAI gpt-3.5-turbo
+- OpenAI gpt-4
+- google/flan-t5-large (HuggingFaceHub)
+- google/flan-t5-xl (HuggingFaceHub)
+- databricks/dolly-v2-3b (TBD)
+
+### Embedding
+- OpenAIEmbeddings
+- HuggingFaceEmbeddings
+- Flan-t5 (TBD)
+
+### Parameters
+- Chunk Size
+- Chunk Overlap
+- Chain type
+
+### Prompt templates
+- You can modify prompt for stuff QA.
+- Match template to see if the answer is correct.
+
 ## Setup
 1. Clone the repository:
 
@@ -29,11 +50,7 @@ echo HUGGINGFACEHUB_API_TOKEN=YYY >> .env
 ```
 
 ## Run
-```
-poetry run streamlit run app.py 
-```
-or
-```
+```shell
 streamlit run app.py 
 ```
 

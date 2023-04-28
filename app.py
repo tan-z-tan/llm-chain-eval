@@ -46,6 +46,7 @@ def run_app():
         "LLM Model",
         [
             Configuration.LlmModel.gpt_3_turbo.value,
+            Configuration.LlmModel.gpt_4.value,
             Configuration.LlmModel.google_flan_t5_large.value,
             Configuration.LlmModel.google_flan_t5_xl.value,
             Configuration.LlmModel.dolly_v2_3b.value,

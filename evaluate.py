@@ -74,7 +74,9 @@ def match_response(response, answer, config: Configuration):
 
 def load_llm(config: Configuration):
     if config.llm_model == Configuration.LlmModel.gpt_3_turbo:
-        return ChatOpenAI(temperature=0, verbose=config.verbose)
+        return ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo", verbose=config.verbose)
+    if config.llm_model == Configuration.LlmModel.gpt_4:
+        return ChatOpenAI(temperature=0, model_name="gpt-4", verbose=config.verbose)
     elif config.llm_model == Configuration.LlmModel.google_flan_t5_xl:
         from langchain import HuggingFaceHub
         repo_id = "google/flan-t5-xl"

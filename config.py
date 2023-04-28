@@ -22,6 +22,7 @@ Helpful Answer:"""
 class Configuration(BaseModel):
     class LlmModel(str, Enum):
         gpt_3_turbo = "gpt-3.5-turbo"
+        gpt_4 = "gpt-4"
         google_flan_t5_xl = "google/flan-t5-xl"
         google_flan_t5_large = "google/flan-t5-large"
         dolly_v2_3b = "dally-v2-3b"
